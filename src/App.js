@@ -1,23 +1,39 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import TaskForm from './components/TaskForm';
+import TaskFilter from './components/TaskFilter';
+import TaskList from './components/TaskList';
+import useTasks from './hooks/useTasks';
+import useTaskDeadlines from './hooks/useTaskDeadlines';
 
 function App() {
+  const {
+    tasks,
+    filter,
+    setFilter,
+    addTask,
+    toggleComplete,
+    editTask,
+    deleteTask,
+    updateTasksWithOverdueAlert,
+    getFilteredTasks
+  } = useTasks();
+
+  useTaskDeadlines(tasks, updateTasksWithOverdueAlert);
+  
+  const filteredTasks = getFilteredTasks();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Задачи</h1>
+      <TaskForm onAddTask={addTask} />
+      <TaskFilter filter={filter} onFilterChange={setFilter} />
+      <TaskList 
+        tasks={filteredTasks} 
+        onToggleComplete={toggleComplete}
+        onEditTask={editTask}
+        onDeleteTask={deleteTask}
+      />
     </div>
   );
 }
